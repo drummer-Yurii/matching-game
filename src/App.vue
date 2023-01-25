@@ -1,20 +1,3 @@
-<template>
-  <h1 class="sr-only">Peek-a-Vue</h1>
-  <img src="/images/peek-a-vue-title.png" 
-    alt="Peek-a-Vue" class="title" />
-    <section class="description">
-      <p>Welcome to Peek-a-Vue!</p>
-      <p>A card matching game powered by Vue.js 3!</p>
-    </section>
-  <transition-group tag="section" class="game-board" name="shuffle-card">
-    <Card v-for="(card) in cardList" :key="`${card.value}-${card.variant}`" :matched="card.matched" :value="card.value"
-      :visible="card.visible" :position="card.position" @select-card="flipCard" />
-  </transition-group>
-  <h2 class="status">{{ status }}</h2>
-  <button v-if="newPlayer" @click="startGame" class="button"><img src="/images/play.svg" alt="Restart Icon" /> Start Game</button>
-  <button v-else @click="restartGame" class="button"><img src="/images/restart.svg" alt="Restart Icon" /> Restart Game</button>
-</template>
-
 <script>
 import _ from 'lodash'
 import { computed, ref, watch } from 'vue';
@@ -142,6 +125,23 @@ export default {
   }
 }
 </script>
+
+<template>
+  <h1 class="sr-only">Peek-a-Vue</h1>
+  <img src="/images/peek-a-vue-title.png" 
+    alt="Peek-a-Vue" class="title" />
+    <section class="description">
+      <p>Welcome to Peek-a-Vue!</p>
+      <p>A card matching game powered by Vue.js 3!</p>
+    </section>
+  <transition-group tag="section" class="game-board" name="shuffle-card">
+    <Card v-for="(card) in cardList" :key="`${card.value}-${card.variant}`" :matched="card.matched" :value="card.value"
+      :visible="card.visible" :position="card.position" @select-card="flipCard" />
+  </transition-group>
+  <h2 class="status">{{ status }}</h2>
+  <button v-if="newPlayer" @click="startGame" class="button"><img src="/images/play.svg" alt="Restart Icon" /> Start Game</button>
+  <button v-else @click="restartGame" class="button"><img src="/images/restart.svg" alt="Restart Icon" /> Restart Game</button>
+</template>
 
 <style>
 html,
