@@ -2,12 +2,17 @@
   <h1 class="sr-only">Peek-a-Vue</h1>
   <img src="/images/peek-a-vue-title.png" 
     alt="Peek-a-Vue" class="title" />
+    <section class="description">
+      <p>Welcome to Peek-a-Vue!</p>
+      <p>A card matching game powered by Vue.js 3!</p>
+    </section>
   <transition-group tag="section" class="game-board" name="shuffle-card">
     <Card v-for="(card) in cardList" :key="`${card.value}-${card.variant}`" :matched="card.matched" :value="card.value"
       :visible="card.visible" :position="card.position" @select-card="flipCard" />
   </transition-group>
-  <h2>{{ status }}</h2>
-  <button @click="restartGame" class="button"><img src="/images/restart.svg" alt="Restart Icon" /> Restart Game</button>
+  <h2 class="status">{{ status }}</h2>
+  <button v-if="newPlayer" @click="startGame" class="button"><img src="/images/play.svg" alt="Restart Icon" /> Start Game</button>
+  <button v-else @click="restartGame" class="button"><img src="/images/restart.svg" alt="Restart Icon" /> Restart Game</button>
 </template>
 
 <script>
@@ -24,6 +29,13 @@ export default {
   setup() {
     const cardList = ref([])
     const userSelection = ref([])
+    const newPlayer = ref(true)
+
+    const startGame = () => {
+      newPlayer.value = false
+
+      restartGame()
+    }
 
     const status = computed(() => {
       if (remainingPairs.value === 0) {
@@ -64,7 +76,7 @@ export default {
       cardList.value.push({
         value: item,
         variant: 2,
-        visible: false,
+        visible: true,
         position: null,
         matched: false
       })
@@ -123,7 +135,9 @@ export default {
       flipCard,
       userSelection,
       status,
-      restartGame
+      restartGame,
+      startGame,
+      newPlayer
     }
   }
 }
@@ -153,15 +167,37 @@ h1 {
   padding-top: 60px;
 }
 
+.description {
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.description p {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.description p:last-child {
+  margin-bottom: 30px; 
+}
+
+.status {
+  font-family: 'Titillium Web', sans-serif;
+}
+
 .button {
   background-color: orange;
   color: white;
-  padding: 0.75rem 0.5rem;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
   font-weight: bold;
+  font-family: 'Titillium Web', sans-serif;
+  font-weight: bold;
+  font-size: 1.1rem;
+  border: 0;
+  border-radius: 10px;
 }
 
 .button img {
