@@ -1,7 +1,7 @@
 <script>
-import _ from 'lodash'
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import createDeck from './features/createDeck'
+import createGame from './features/createGame';
 import { launchConfetti } from './utilities/confetti';
 import Card from './components/Card.vue';
 import halloweenDeck from './data/halloweenDeck.json'
@@ -14,40 +14,8 @@ export default {
   },
   setup() {
     const {cardList} = createDeck(halloweenDeck)
-    const userSelection = ref([])
-    const newPlayer = ref(true)
-
-    const startGame = () => {
-      newPlayer.value = false
-
-      restartGame()
-    }
-
-    const status = computed(() => {
-      if (remainingPairs.value === 0) {
-        return 'Player wins!'
-      } else {
-        return `Remaining Pairs: ${remainingPairs.value}`
-      }
-    })
-
-    const remainingPairs = computed(() => {
-      const remainingCards = cardList.value.filter(card => card.matched === false).length
-      return remainingCards / 2
-    })
-
-    const restartGame = () => {
-      cardList.value = _.shuffle(cardList.value)
-
-      cardList.value = cardList.value.map((card, index) => {
-        return {
-          ...card,
-          matched: false,
-          position: index,
-          visible: false
-        }
-      })
-    }
+    const { newPlayer, startGame, restartGame, matchesFound, status } = createGame(cardList)
+    const userSelection = ref([])  
 
     const flipCard = (payload) => {
       cardList.value[payload.position].visible = true
@@ -65,7 +33,7 @@ export default {
       }
     }
 
-    watch(remainingPairs, currentValue => {
+    watch(matchesFound, currentValue => {
       if (currentValue === 0) {
         launchConfetti()
       }
